@@ -14,7 +14,33 @@ function App() {
     index: ""
   })
   let getValue = (event)=>{
-    let oldData= {...formData}
+    let oldData= {...formData }
+    let inputName = event.target.name ;
+    let inputValue = event.target.value;
+    oldData[inputName] = inputValue;
+  setFormData(oldData)
+
+  }
+
+ let [userdata, setUserData] = useState([])
+
+
+  let handleSubmit = (event)=>{
+
+    let currentUserFormData = {
+      uname : formData.uname,
+       uemail : formData.uemail,
+        unumber: formData.unumber,
+         umessage: formData.umessage
+     
+    }
+     let oldUserData  = [...userdata, currentUserFormData];
+     console.log(oldUserData)
+
+    setUserData(oldUserData)
+
+    event.preventDefault();
+
   }
 
 
@@ -29,7 +55,8 @@ function App() {
         </Row>
         <Row>
           <Col lg={5}>
-            <form>
+          {userdata.length}
+            <form onSubmit={handleSubmit}>
               <div className='pb-3' >
                 <label className='form-label'>Name</label>
                 <input type='text' onChange={getValue} value={formData.uname} name='uname' className='form-control' />
@@ -53,8 +80,8 @@ function App() {
             </form>
           </Col>
         </Row>
-      </Container>
-    </Container>
+      </Container> 
+    </Container>                
     
   );
 }
