@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import "bootstrap/dist/css/bootstrap.css";
 import  "bootstrap/dist/js/bootstrap.bundle.js"
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, Table } from 'react-bootstrap';
 import { useState } from 'react';
 
 function App() {
@@ -38,6 +38,11 @@ function App() {
      console.log(oldUserData)
 
     setUserData(oldUserData)
+    setFormData( {uname:"",
+    uemail: "",
+    unumber: "",
+    umessage:"",
+    index: ""})
 
     event.preventDefault();
 
@@ -78,6 +83,49 @@ function App() {
                 formData.index!=="" ? "Update" : "Save"
                 }</button>
             </form>
+          </Col>
+          <Col lg={7}>
+
+    <Table striped bordered hover>
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Number</th>
+          <th>Message</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {userdata.length>= 1 ?
+        userdata.map((obj,i)=>{
+          return(
+            <tr key={i}> 
+          <td>{i+1}</td>
+          <td>{obj.uname}</td>
+          <td>{obj.uemail}</td>
+          <td>{obj.unumber}</td>
+          <td>{obj.umessage}</td>
+          <td>
+            <button>Delete</button>
+            <button>Edit</button>
+          </td>
+        </tr>
+
+          )
+        })
+         :
+        <tr>
+          <td colSpan={6}> No Data Found </td>
+        </tr> 
+      
+      }
+      </tbody>  
+        
+    </Table>
+  
+
           </Col>
         </Row>
       </Container> 
