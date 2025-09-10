@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.bundle.js"
+  import { ToastContainer, toast } from 'react-toastify';
 import { Container, Row, Col, Table } from 'react-bootstrap';
 import { useState } from 'react';
 
@@ -36,7 +37,7 @@ function App() {
     }
     let checkFilterUser = userdata.filter((v, i) => v.uemail == formData.uemail || v.unumber == formData.unumber)
     if (checkFilterUser.length == 1){
-      alert("User already Exist")
+        toast.error("User already Exist")
     }
     else
     {let oldUserData = [...userdata, currentUserFormData];
@@ -55,10 +56,19 @@ function App() {
 
   }
 
+  let deleteRow =(indexNumber)=>{
+    let filterDataafterDelete = userdata.filter((v,i)=> i!==indexNumber)
+    console.log(filterDataafterDelete);
+    setUserData(filterDataafterDelete);
+    toast.success("Row delete successfully");
+
+  } 
+
 
 
   return (
     <Container fluid>
+       <ToastContainer />
       <Container>
         <Row>
           <Col className='text-center py-5'>
@@ -106,16 +116,16 @@ function App() {
               </thead>
               <tbody>
                 {userdata.length >= 1 ?
-                  userdata.map((obj, i) => {
+                  userdata.map((obj, index) => {
                     return (
-                      <tr key={i}>
-                        <td>{i + 1}</td>
+                      <tr key={index}>
+                        <td>{index + 1}</td>
                         <td>{obj.uname}</td>
                         <td>{obj.uemail}</td>
                         <td>{obj.unumber}</td>
                         <td>{obj.umessage}</td>
                         <td>
-                          <button>Delete</button>
+                          <button onClick={()=>deleteRow(index)}>Delete</button>
                           <button>Edit</button>
                         </td>
                       </tr>
