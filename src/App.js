@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.bundle.js"
-  import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import { Container, Row, Col, Table } from 'react-bootstrap';
 import { useState } from 'react';
 
@@ -28,6 +28,8 @@ function App() {
 
   let handleSubmit = (event) => {
 
+
+
     let currentUserFormData = {
       uname: formData.uname,
       uemail: formData.uemail,
@@ -35,40 +37,74 @@ function App() {
       umessage: formData.umessage
 
     }
-    let checkFilterUser = userdata.filter((v, i) => v.uemail == formData.uemail || v.unumber == formData.unumber)
-    if (checkFilterUser.length == 1){
+    if (formData.index === "") {
+      let checkFilterUser = userdata.filter((v, i) => v.uemail == formData.uemail || v.unumber == formData.unumber)
+      if (checkFilterUser.length == 1) {
         toast.error("User already Exist")
-    }
-    else
-    {let oldUserData = [...userdata, currentUserFormData];
-    console.log(oldUserData)
+      }
+      else {
+        let oldUserData = [...userdata, currentUserFormData];
 
-    setUserData(oldUserData)  
-    setFormData({
-      uname: "",
-      uemail: "",
-      unumber: "",
-      umessage: "",
-      index: ""
-    })}
+
+        setUserData(oldUserData)
+        setFormData({
+          uname: "",
+          uemail: "",
+          unumber: "",
+          umessage: "",
+          index: ""
+        })
+      }
+    }
+    else {
+      let editIndex = formData.index;
+      let checkFilterUser = userdata.filter((v, i) => (v.uemail == formData.uemail || v.unumber == formData.unumber) && i != editIndex)
+      let oldData = userdata;
+      if(checkFilterUser.length==0){
+      oldData[editIndex]['uname'] = formData.uname
+      oldData[editIndex]['uemail'] = formData.uemail
+      oldData[editIndex]['unumber'] = formData.unumber
+      oldData[editIndex]['umessage'] = formData.umessage
+      setUserData(oldData)
+      setFormData({
+        uname: "",
+        uemail: "",
+        unumber: "",
+        umessage: "",
+        index: ""
+      })}
+      else{
+         toast.error("User already Exist")
+      }
+
+
+    }
 
     event.preventDefault();
 
   }
 
-  let deleteRow =(indexNumber)=>{
-    let filterDataafterDelete = userdata.filter((v,i)=> i!==indexNumber)
-    console.log(filterDataafterDelete);
+  let deleteRow = (indexNumber) => {
+    let filterDataafterDelete = userdata.filter((v, i) => i !== indexNumber)
     setUserData(filterDataafterDelete);
     toast.success("Row delete successfully");
 
-  } 
+  }
+
+  let editRow = (indexNumber) => {
+    let editData = userdata.filter((v, i) => i == indexNumber)[0]
+
+    editData['index'] = indexNumber;
+
+    setFormData(editData)
+
+  }
 
 
 
   return (
     <Container fluid>
-       <ToastContainer />
+      <ToastContainer />
       <Container>
         <Row>
           <Col className='text-center py-5'>
@@ -125,8 +161,8 @@ function App() {
                         <td>{obj.unumber}</td>
                         <td>{obj.umessage}</td>
                         <td>
-                          <button onClick={()=>deleteRow(index)}>Delete</button>
-                          <button>Edit</button>
+                          <button onClick={() => deleteRow(index)}>Delete</button>
+                          <button onClick={() => editRow(index)}>Update</button>
                         </td>
                       </tr>
 
